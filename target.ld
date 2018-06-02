@@ -23,7 +23,7 @@
  */
 OUTPUT_ARCH( "riscv" )
 
-ENTRY( _start )
+ENTRY( _reset )
 
 MEMORY
 {
@@ -36,6 +36,7 @@ SECTIONS
     .text :
     {
         _start_text = .;
+        KEEP(*(.init))
         KEEP(*(.isr_vector))
         *(.text*)
         *(.rodata*)
@@ -68,4 +69,4 @@ SECTIONS
 }
 
 PROVIDE(_start_heap = _end);
-PROVIDE(_end_stack  = ORIGIN(RAM) + LENGTH(RAM));
+PROVIDE(_end_stack  = ORIGIN(RAM) + (LENGTH(RAM) - 1K) );

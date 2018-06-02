@@ -60,7 +60,7 @@ static inline void _trap_entry(void)
 }
 
 extern void main(void);
-void isr_synctrap(void) {
+void __attribute__((section(".init"))) _reset(void) {
     register uint32_t *src, *dst;
     asm volatile("la gp, _global_pointer");
     asm volatile("la sp, _end_stack");
@@ -88,6 +88,12 @@ void isr_synctrap(void) {
 void isr_empty(void)
 {
     /* Ignore the event and continue */
+}
+
+void __attribute__((weak)) isr_synctrap(void)
+{
+    /* panic */
+    while(1);
 }
 
 void __attribute__((weak)) isr_vmsi(void)
