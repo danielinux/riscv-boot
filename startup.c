@@ -24,6 +24,7 @@
 
 #include <stdint.h>
 
+extern uint32_t  _start_vector;
 extern uint32_t  _stored_data;
 extern uint32_t  _start_data;
 extern uint32_t  _end_data;
@@ -64,6 +65,9 @@ void __attribute__((section(".init"))) _reset(void) {
     register uint32_t *src, *dst;
     asm volatile("la gp, _global_pointer");
     asm volatile("la sp, _end_stack");
+
+    /* Set up vectored interrupt, with IV starting at offset 0x100 */
+    asm volatile("csrw mtvec, %0":: "r"((uint8_t *)(&_start_vector) + 1));
 
     src = (uint32_t *) &_stored_data;
     dst = (uint32_t *) &_start_data;

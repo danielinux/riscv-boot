@@ -37,6 +37,8 @@ SECTIONS
     {
         _start_text = .;
         KEEP(*(.init))
+        . = ORIGIN(FLASH) + 0x100;
+        _start_vector = .;
         KEEP(*(.isr_vector))
         *(.text*)
         *(.rodata*)
