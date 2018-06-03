@@ -21,21 +21,75 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-volatile int __attribute__((used)) a= 53;
-volatile static int __attribute__((used)) b;
+.section .isr_vector
+.align 8
 
+.global IV
 
-int main(void)
-{
+IV:
+    j isr_synctrap
+    .align 2
+    j isr_empty
+    .align 2
+    j isr_empty
+    .align 2
+    j isr_vmsi
+    .align 2
+    j isr_empty
+    .align 2
+    j isr_empty
+    .align 2
+    j isr_empty
+    .align 2
+    j isr_vmti
+    .align 2
+    j isr_empty
+    .align 2
+    j isr_empty
+    .align 2
+    j isr_empty
+    .align 2
+    j isr_vmei
+    .align 2
+    j isr_empty
+    .align 2
+    j isr_empty
+    .align 2
+    j isr_empty
+    .align 2
+    j isr_empty
+    .align 2
+    j isr_irq0
+    .align 2
+    j isr_irq1
+    .align 2
+    j isr_irq2
+    .align 2
+    j isr_irq3
+    .align 2
+    j isr_irq4
+    .align 2
+    j isr_irq5
+    .align 2
+    j isr_irq6
+    .align 2
+    j isr_irq7
+    .align 2
+    j isr_irq8
+    .align 2
+    j isr_irq9
+    .align 2
+    j isr_irq10
+    .align 2
+    j isr_irq11
+    .align 2
+    j isr_irq12
+    .align 2
+    j isr_irq13
+    .align 2
+    j isr_irq14
+    .align 2
+    j isr_irq15
+    .align 2
 
-    asm volatile("ebreak");
-
-    while(1) {
-        b ++;
-        if (b > 300000) {
-            b = 0;
-            asm volatile("ecall");
-        }
-    }
-
-}
+     

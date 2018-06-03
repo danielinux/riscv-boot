@@ -25,8 +25,9 @@
 CROSS_COMPILE:=riscv64-unknown-elf-
 CC:=$(CROSS_COMPILE)gcc
 LD:=$(CROSS_COMPILE)gcc
+AS:=$(CROSS_COMPILE)gcc
 GDB:=$(CROSS_COMPILE)gdb
-OBJS:=startup.o main.o
+OBJS:=startup.o main.o vector.o
 
 LSCRIPT:=target.ld
 
@@ -36,6 +37,7 @@ OBJCOPY:=$(CROSS_COMPILE)objcopy
 CFLAGS:=-g -ggdb -Wall -Wno-main -Wstack-usage=200 -ffreestanding -Wno-unused -nostdlib
 CFLAGS+=-fno-builtin-printf -DUSE_PLIC -DUSE_M_TIME -g -march=rv32imac -mabi=ilp32 -mcmodel=medany
 LDFLAGS:=-T $(LSCRIPT) -Wl,-gc-sections -Wl,-Map=image.map -nostdlib -march=rv32imac -mabi=ilp32 -mcmodel=medany
+ASFLAGS:=$(CFLAGS)
 
 #all: image.bin
 

@@ -33,6 +33,7 @@ extern uint32_t  _end_bss;
 extern uint32_t  _end_stack;
 extern uint32_t  _start_heap;
 extern uint32_t  _global_pointer;
+extern void (* const IV[])(void);
 
 static int zeroed_variable_in_bss;
 static int initialized_variable_in_data = 42;
@@ -97,7 +98,8 @@ void isr_empty(void)
 void __attribute__((weak)) isr_synctrap(void)
 {
     /* panic */
-    while(1);
+    while(1)
+        ;
 }
 
 void __attribute__((weak)) isr_vmsi(void)
@@ -200,39 +202,3 @@ void __attribute__((weak)) isr_irq15(void)
     while(1);
 }
 
-__attribute__ ((section(".isr_vector")))
-void (* const IV[])(void) =
-{
-	isr_synctrap,                   // Reset
-	0,                              
-	0,                   
-    isr_vmsi,
-    0,
-    0,
-    0,
-    isr_vmti,
-    0,
-    0,
-    0,
-    isr_vmei,
-    0,
-    0,
-    0,
-    0,
-    isr_irq0,
-    isr_irq1,
-    isr_irq2,
-    isr_irq3,
-    isr_irq4,
-    isr_irq5,
-    isr_irq6,
-    isr_irq7,
-    isr_irq8,
-    isr_irq9,
-    isr_irq10,
-    isr_irq11,
-    isr_irq12,
-    isr_irq13,
-    isr_irq14,
-    isr_irq15
-};
