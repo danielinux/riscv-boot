@@ -24,6 +24,9 @@
 
 #include <stdint.h>
 
+extern void trap_entry(void);
+extern void trap_exit(void);
+
 extern uint32_t  _start_vector;
 extern uint32_t  _stored_data;
 extern uint32_t  _start_data;
@@ -37,29 +40,6 @@ extern void (* const IV[])(void);
 
 static int zeroed_variable_in_bss;
 static int initialized_variable_in_data = 42;
-
-static inline void _trap_entry(void)
-{
-    /* Move stack pointer down 16 words */
-    asm volatile ("addi sp, sp, -64\n");
-    /* Save registers in the stack */
-    asm volatile ("sw x1, 0(sp)\n"); 
-    asm volatile ("sw x5, 4(sp)"); 
-    asm volatile ("sw x6, 8(sp)"); 
-    asm volatile ("sw x7, 12(sp)"); 
-    asm volatile ("sw x10, 16(sp)"); 
-    asm volatile ("sw x11, 20(sp)"); 
-    asm volatile ("sw x12, 24(sp)"); 
-    asm volatile ("sw x13, 28(sp)"); 
-    asm volatile ("sw x14, 32(sp)"); 
-    asm volatile ("sw x15, 36(sp)"); 
-    asm volatile ("sw x16, 40(sp)"); 
-    asm volatile ("sw x17, 44(sp)"); 
-    asm volatile ("sw x28, 48(sp)"); 
-    asm volatile ("sw x29, 52(sp)"); 
-    asm volatile ("sw x30, 56(sp)"); 
-    asm volatile ("sw x31, 60(sp)"); 
-}
 
 extern void main(void);
 void __attribute__((section(".init"))) _reset(void) {
@@ -90,16 +70,16 @@ void __attribute__((section(".init"))) _reset(void) {
     main();
 }
 
-void isr_empty(void)
+static uint32_t synctrap_cause = 0;
+void isr_synctrap(void)
 {
-    /* Ignore the event and continue */
+    asm volatile("csrr %0,mcause" : "=r"(synctrap_cause));
+    asm volatile("ebreak");
 }
 
-void __attribute__((weak)) isr_synctrap(void)
+void isr_empty(void)
 {
-    /* panic */
-    while(1)
-        ;
+
 }
 
 void __attribute__((weak)) isr_vmsi(void)

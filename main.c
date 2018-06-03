@@ -28,11 +28,11 @@ volatile static int __attribute__((used)) b;
 int main(void)
 {
 
-    asm volatile("ebreak");
+    //asm volatile("ebreak");
 
     while(1) {
         b ++;
-        if (b > 300000) {
+        if (b > 3000000) {
             b = 0;
             asm volatile("ecall");
         }
