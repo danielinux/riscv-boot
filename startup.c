@@ -42,7 +42,7 @@ static int zeroed_variable_in_bss;
 static int initialized_variable_in_data = 42;
 
 extern void main(void);
-void __attribute__((section(".init"))) _reset(void) {
+void __attribute__((section(".init"),naked)) _reset(void) {
     register uint32_t *src, *dst;
     asm volatile("la gp, _global_pointer");
     asm volatile("la sp, _end_stack");
